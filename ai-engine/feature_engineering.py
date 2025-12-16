@@ -77,7 +77,7 @@ def build_graph_data():
         labels.append(label)
 
     # 4. EXPORT ENRICHED CSV (For Dashboard/Visualization)
-    print("   💾 Saving enriched CSV for dashboard integration...")
+    print("Saving enriched CSV for dashboard integration...")
     df_nodes['in_degree'] = in_degrees
     df_nodes['out_degree'] = out_degrees
     df_nodes['total_incoming'] = total_in_amounts
