@@ -45,7 +45,7 @@ export default function FraudGraph3D({
       setDimensions({ width, height });
     });
 
-    observer.observe(containerRef.current);
+    observer.observe(containRef.current);
     return () => observer.disconnect();
   }, []);
 

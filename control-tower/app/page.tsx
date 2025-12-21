@@ -1,6 +1,6 @@
 "use client";
 import Navbar from "./components/Navbar";
-import {Check,Network,AlertTriangle,Brain} from "lucide-react";
+import {Check,Network,AlertTriangle,Brain,UserX,Activity,Lightbulb} from "lucide-react";
 import {
   IndianRupee,
   Banknote,
@@ -110,7 +110,105 @@ By combining graph analytics, machine learning, and explainable AI, MuleHunter e
             <span className="text-2xl font-bold pl-8">Use </span><span className="text-2xl font-bold text-[#caff33]">Cases</span>
           </div>
            <div className="text-sm pl-8 text-gray-600">MuleHunter is built for investigators and institutions to uncover mule networks, explain risk, and act on financial fraud with confidence.</div>
-        
+
+           <div className="grid grid-cols-1 lg:grid-cols-2 p-4">
+            {/* left content */}
+            <div className="grid grid-cols-2 gap-4 py-4 mx-25 my-10 p-2 border border-gray-900 rounded-2xl font-bold">
+              <div className="flex flex-col items-center justify-center gap-5 text-xs p-2 border border-gray-900 rounded-2xl ml-6">
+                <UserX className="w-5 text-[#caff33]"/>
+                <div className="">Mule Account Identification</div>
+              </div>
+               <div className="flex flex-col items-center justify-center gap-5 text-xs p-2 border border-gray-900 rounded-2xl mr-6">
+                <Network className="w-5 text-[#caff33]"/>
+                <div className="">Collusive Ring Detection</div>
+              </div>
+               <div className="flex flex-col items-center justify-center gap-5 text-xs p-2 border border-gray-900 rounded-2xl ml-6 ">
+                <Activity className="w-5 text-[#caff33]"/>
+                <div className="">Transaction Anomaly Detection</div>
+              </div>
+               <div className="flex flex-col items-center justify-center gap-5 text-xs p-2 border border-gray-900 rounded-2xl mr-6">
+                <Lightbulb className="w-5 text-[#caff33]"/>
+                <div className="">Explainable Fraud Decisions</div>
+              </div>
+               
+             
+            </div>
+            {/* right content */}
+            <div className=" py-4 mx-10 my-10 flex flex-col gap-3">
+              <h2 className="text-lg font-bold">For Financial Institutions</h2>
+              <div className="text-sm text-gray-500">Banks, NBFCs, FinTechs, and Payment Platforms leverage MuleHunter to reduce fraud losses and regulatory risk.</div>
+              <div className="grid grid-cols-3">
+                 <div className="m-5 p-3">
+                  <div className="text-3xl text-[#caff33]">78%</div>
+                  <div className="text-xs text-gray-400">Faster mule account detection</div>
+                 </div>
+                  <div className="m-5 p-3">
+                  <div className="text-3xl text-[#caff33]">63%</div>
+                  <div className="text-xs text-gray-400">Reduction in false positives</div>
+                 </div>
+                  <div className="m-5 p-3">
+                  <div className="text-3xl text-[#caff33]">91%</div>
+                  <div className="text-xs text-gray-400">Improved investigation confidence</div>
+                 </div>
+                 
+              </div>
+              <div>
+                <button className=" px-4 py-2 rounded-2xl text-sm text-gray-400 border border-gray-400">Learn More</button>
+              </div>
+            </div>
+            
+            <div></div>
+           </div>
+           <div className="grid grid-cols-1 lg:grid-cols-2 p-4">
+            {/* left content */}
+            <div className=" py-4 mx-10 my-10 flex flex-col gap-3 ">
+              <h2 className="text-lg font-bold">For Financial Institutions</h2>
+              <div className="text-sm text-gray-500">Banks, NBFCs, FinTechs, and Payment Platforms leverage MuleHunter to reduce fraud losses and regulatory risk.</div>
+              <div className="grid grid-cols-3">
+                 <div className="m-5 p-3">
+                  <div className="text-3xl text-[#caff33]">78%</div>
+                  <div className="text-xs text-gray-400">Faster mule account detection</div>
+                 </div>
+                  <div className="m-5 p-3">
+                  <div className="text-3xl text-[#caff33]">63%</div>
+                  <div className="text-xs text-gray-400">Reduction in false positives</div>
+                 </div>
+                  <div className="m-5 p-3">
+                  <div className="text-3xl text-[#caff33]">91%</div>
+                  <div className="text-xs text-gray-400">Improved investigation confidence</div>
+                 </div>
+                 
+              </div>
+              <div>
+                <button className=" px-4 py-2 rounded-2xl text-sm text-gray-400 border border-gray-400">Learn More</button>
+              </div>
+            </div>
+            {/* right content */}
+            <div className="grid grid-cols-2 gap-4 py-4 mx-25 my-10 p-2 border border-gray-900 rounded-2xl font-bold">
+              <div className="flex flex-col items-center justify-center gap-5 text-xs p-2 border border-gray-900 rounded-2xl ml-6">
+                <UserX className="w-5 text-[#caff33]"/>
+                <div className="">Mule Account Identification</div>
+              </div>
+               <div className="flex flex-col items-center justify-center gap-5 text-xs p-2 border border-gray-900 rounded-2xl mr-6">
+                <Network className="w-5 text-[#caff33]"/>
+                <div className="">Collusive Ring Detection</div>
+              </div>
+               <div className="flex flex-col items-center justify-center gap-5 text-xs p-2 border border-gray-900 rounded-2xl ml-6 ">
+                <Activity className="w-5 text-[#caff33]"/>
+                <div className="">Transaction Anomaly Detection</div>
+              </div>
+               <div className="flex flex-col items-center justify-center gap-5 text-xs p-2 border border-gray-900 rounded-2xl mr-6">
+                <Lightbulb className="w-5 text-[#caff33]"/>
+                <div className="">Explainable Fraud Decisions</div>
+              </div>
+               
+             
+            </div>
+            
+            
+            
+            <div></div>
+           </div>
       </div>
 
     </div>
