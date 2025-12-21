@@ -1,6 +1,6 @@
 "use client";
 import Navbar from "./components/Navbar";
-import {Check,ArrowLeftRight} from "lucide-react";
+import {Check,Network,AlertTriangle,Brain} from "lucide-react";
 import {
   IndianRupee,
   Banknote,
@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import TransactionCard from "./components/TransactionCard";
 import GreenIconCircle from "./components/GreenIconCircle";
+import CapabilityCard from "./components/CapabilityCard";
 
 export default function Page() {
   return(
@@ -18,7 +19,7 @@ export default function Page() {
      
 
       {/* HERO SECTION */}
-        <div className="grid grid-cols-2 gap-6 p-8 h-screen ">
+        <div className="grid  grid-cols-1 lg:grid-cols-2 gap-6 p-8 lg:h-screen ">
           {/* Left side content */}
           <div className="flex flex-col justify-center items-start gap-4 pb-10">
              <div className="p-3  bg-gray-900 rounded-3xl ml-2  flex gap-3 text-xs lg:w-1/2">
@@ -74,6 +75,43 @@ By combining graph analytics, machine learning, and explainable AI, MuleHunter e
             
           </div>
         </div>
+
+      {/*Core Capabilities  */}
+         <div className="flex gap-4 flex-col">
+          <div>
+            <span className="text-2xl font-bold pl-8">Core </span><span className="text-2xl font-bold text-[#caff33]">Capabilities</span>
+          </div>
+          
+
+          <div className="text-sm pl-8 text-gray-600">MuleHunter provides a unified intelligence layer for detecting, analyzing, and explaining financial fraud networks at scale.</div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 py-8 px-15 gap-6">
+            <CapabilityCard icon={Network} title="Graph-Based Fraud Detection" points={[
+             "Detect mule rings and collusive behavior using transaction graph analysis",
+             "Identify hidden communities and circular money flows",
+              ]}
+            />
+            <CapabilityCard icon={AlertTriangle} title="Anomaly & Risk Scoring" points={[
+             "Machine learning models flag high-risk nodes and transactions",
+             "Velocity, volume, and behavioral deviation analysis",
+              ]}
+            />
+            <CapabilityCard icon={Brain} title="Explainable AI (XAI)" points={[
+             "SHAP-powered feature attribution",
+             "Human-readable AI explanations for investigators and auditors",
+              ]}
+            />
+          </div>
+         </div>
+
+      {/* Use Cases  */}
+      <div className="flex gap-3 flex-col">
+          <div>
+            <span className="text-2xl font-bold pl-8">Use </span><span className="text-2xl font-bold text-[#caff33]">Cases</span>
+          </div>
+           <div className="text-sm pl-8 text-gray-600">MuleHunter is built for investigators and institutions to uncover mule networks, explain risk, and act on financial fraud with confidence.</div>
+        
+      </div>
 
     </div>
   )
