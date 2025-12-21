@@ -14,7 +14,7 @@ export default function FraudGraph3D({
   const [activeNodeId, setActiveNodeId] = useState(null);
 
   useEffect(() => {
-    fetch("/nodes_viz.json")
+    fetch("./nodes_viz.json")
       .then((res) => {
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);

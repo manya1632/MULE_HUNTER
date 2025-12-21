@@ -4,7 +4,7 @@ export default function useExplanations() {
   const [explanations, setExplanations] = useState({});
 
   useEffect(() => {
-    fetch("/fraud_explanations.json")
+    fetch("./fraud_explanations.json")
       .then((res) => {
         if (!res.ok) {
           throw new Error(`Server returned ${res.status} ${res.statusText}`);
