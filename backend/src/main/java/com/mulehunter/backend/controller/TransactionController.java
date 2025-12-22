@@ -19,7 +19,7 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
-    @PostMapping("/transactions")
+    @PostMapping("/api/transactions")
     public Mono<Transaction> createTransaction(@RequestBody TransactionRequest request) {
         return transactionService.createTransaction(request);
     }
