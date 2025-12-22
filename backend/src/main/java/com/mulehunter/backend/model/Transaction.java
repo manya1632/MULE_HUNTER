@@ -11,19 +11,20 @@ public class Transaction {
     @Id
     private String id;
 
-    private String accountId;
+    private String sourceAccount;
+    private String targetAccount;
+
     private BigDecimal amount;
-    private String merchant;
     private boolean suspectedFraud;
 
     public Transaction() {}
 
     public static Transaction from(TransactionRequest request) {
         Transaction tx = new Transaction();
-        tx.accountId = request.getAccountId();
+        tx.sourceAccount = request.getSourceAccount();
+        tx.targetAccount = request.getTargetAccount();
         tx.amount = request.getAmount();
-        tx.merchant = request.getMerchant();
-        tx.suspectedFraud = false; //default, model decides
+        tx.suspectedFraud = false;
         return tx;
     }
 
@@ -31,16 +32,16 @@ public class Transaction {
         return id;
     }
 
-    public String getAccountId() {
-        return accountId;
+    public String getSourceAccount() {
+        return sourceAccount;
+    }
+
+    public String getTargetAccount() {
+        return targetAccount;
     }
 
     public BigDecimal getAmount() {
         return amount;
-    }
-
-    public String getMerchant() {
-        return merchant;
     }
 
     public boolean isSuspectedFraud() {

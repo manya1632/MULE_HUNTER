@@ -4,16 +4,24 @@ import java.math.BigDecimal;
 
 public class TransactionRequest {
 
-    private String accountId;
+    private String sourceAccount;
+    private String targetAccount;
     private BigDecimal amount;
-    private String merchant;
 
-    public String getAccountId() {
-        return accountId;
+    public String getSourceAccount() {
+        return sourceAccount;
     }
 
-    public void setAccountId(String accountId) {
-        this.accountId = accountId;
+    public void setSourceAccount(String sourceAccount) {
+        this.sourceAccount = sourceAccount;
+    }
+
+    public String getTargetAccount() {
+        return targetAccount;
+    }
+
+    public void setTargetAccount(String targetAccount) {
+        this.targetAccount = targetAccount;
     }
 
     public BigDecimal getAmount() {
@@ -22,13 +30,5 @@ public class TransactionRequest {
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
-    }
-
-    public String getMerchant() {
-        return merchant;
-    }
-
-    public void setMerchant(String merchant) {
-        this.merchant = merchant;
     }
 }
