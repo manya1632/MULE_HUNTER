@@ -39,16 +39,31 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            # Create app directory if not exists
+            # 1. Ensure the directory exists
             mkdir -p ~/control-tower
-            cd ~/control-tower
             
-            # Export secrets for docker-compose to use
-            export DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
-            export MONGODB_URI=${{ secrets.MONGODB_URI }}
-            export AUTH_SECRET=${{ secrets.AUTH_SECRET }}
-            export AUTH_URL=${{ secrets.AUTH_URL }}
+            # 2. Go into the directory
+            cd ~/control-tower
 
-            # Pull the new image and restart
-            docker-compose pull  || docker compose pull
+            # 3. Create/Update the docker-compose file on the EC2 manually 
+            # (This ensures the file is ALWAYS there even if git pull fails)
+            cat <<EOF > docker-compose.yml
+            services:
+              next-app:
+                image: ${{ secrets.DOCKERHUB_USERNAME }}/control-tower:latest
+                container_name: control-tower-app
+                ports:
+                  - "3000:3000"
+                environment:
+                  - MONGODB_URI=${{ secrets.MONGODB_URI }}
+                  - AUTH_SECRET=${{ secrets.AUTH_SECRET }}
+                  - AUTH_URL=${{ secrets.AUTH_URL }}
+                  - NODE_ENV=production
+                restart: always
+            EOF
+
+            # 4. Pull the latest image
+            docker-compose pull || docker compose pull
+
+            # 5. Start the container
             docker-compose up -d || docker compose up -d
