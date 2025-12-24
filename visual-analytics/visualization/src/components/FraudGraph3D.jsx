@@ -18,9 +18,8 @@ export default function FraudGraph3D({
     height: window.innerHeight,
   });
 
-  // =========================
   // LOAD GRAPH DATA (CORRECT + SAFE)
-  // =========================
+
   useEffect(() => {
     const controller = new AbortController();
 
@@ -32,7 +31,6 @@ export default function FraudGraph3D({
 
         const text = await res.text();
 
-        // Safety: backend HTML / error page
         if (text.trim().startsWith("<")) {
           console.error("HTML received instead of JSON:", text);
           return;
@@ -40,9 +38,8 @@ export default function FraudGraph3D({
 
         const data = JSON.parse(text);
 
-        // =========================
-        // NORMALIZE TO OLD UI CONTRACT
-        // =========================
+        // NORMALIZE Backend DATA
+
         const normalized = {
           nodes: data.nodes.map((n) => ({
             id: n.nodeId,
@@ -84,9 +81,8 @@ export default function FraudGraph3D({
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
-  // =========================
-  // FRAUD-ONLY FILTER (OLD LOGIC)
-  // =========================
+  // FRAUD-ONLY FILTER
+
   const visibleGraph = useMemo(() => {
     if (!rawGraph) return null;
     if (!showOnlyFraud) return rawGraph;
@@ -105,9 +101,8 @@ export default function FraudGraph3D({
     };
   }, [rawGraph, showOnlyFraud]);
 
-  // =========================
   // CAMERA DEFAULT
-  // =========================
+
   useEffect(() => {
     if (!fgRef.current || !rawGraph) return;
     fgRef.current.cameraPosition(
@@ -117,9 +112,8 @@ export default function FraudGraph3D({
     );
   }, [rawGraph]);
 
-  // =========================
   // CAMERA ON NODE SELECT
-  // =========================
+
   useEffect(() => {
     if (!selectedNode || !fgRef.current) return;
     fgRef.current.cameraPosition(
@@ -133,9 +127,8 @@ export default function FraudGraph3D({
     );
   }, [selectedNode]);
 
-  // =========================
   // LOADING STATE
-  // =========================
+
   if (!visibleGraph) {
     return (
       <div className="flex h-screen items-center justify-center text-white">
@@ -144,9 +137,6 @@ export default function FraudGraph3D({
     );
   }
 
-  // =========================
-  // RENDER (OLD DESIGN)
-  // =========================
   return (
     <div className="relative h-screen w-full bg-linear-to-br from-black via-slate-900 to-black">
       {/* HEADER */}

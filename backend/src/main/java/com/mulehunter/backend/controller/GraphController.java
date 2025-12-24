@@ -29,9 +29,8 @@ public class GraphController {
                 this.mongo = mongo;
         }
 
-        // =====================================================
         // GET FULL GRAPH (nodes + links)
-        // =====================================================
+
         @GetMapping
         public Mono<GraphResponseDTO> getGraph() {
 
@@ -79,7 +78,7 @@ public class GraphController {
 
                                         return new GraphLinkDTO(source, target, amount);
                                 })
-                                .filter(l -> l != null) // 🔥 prevents ForceGraph crash
+                                .filter(l -> l != null)
                                 .collectList()
                                 .onErrorReturn(List.of());
 
@@ -88,13 +87,11 @@ public class GraphController {
                                 .onErrorReturn(new GraphResponseDTO(List.of(), List.of()));
         }
 
-        // =====================================================
         // GET SINGLE NODE DETAIL (SHAP / reasons)
-        // =====================================================
+
         @GetMapping("/node/{nodeId}")
         public Mono<GraphNodeDetailDTO> getNodeDetail(@PathVariable String nodeId) {
 
-                // 🔥 SUPPORT BOTH NUMBER & STRING node_id
                 Query query = new Query(
                                 new Criteria().orOperator(
                                                 Criteria.where("node_id").is(nodeId),
@@ -123,7 +120,7 @@ public class GraphController {
                                                         reasons,
                                                         shapFactors);
                                 })
-                                // 🔥 NEVER return empty body
+
                                 .switchIfEmpty(
                                                 Mono.just(
                                                                 new GraphNodeDetailDTO(
@@ -134,9 +131,8 @@ public class GraphController {
                                                                                 List.of())));
         }
 
-        // =====================================================
         // SAFE PARSERS
-        // =====================================================
+
         private static double parseDouble(Object v) {
                 try {
                         return v == null ? 0.0 : Double.parseDouble(v.toString());

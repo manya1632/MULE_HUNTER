@@ -2,41 +2,20 @@ import { useState, useEffect } from "react";
 import useExplanations from "../hooks/useExplanations";
 
 export default function NodeInspector({ node, onClose }) {
-  // =========================
-  // STATE (ALWAYS DECLARED)
-  // =========================
   const [aiText, setAiText] = useState(null);
   const [loadingAI, setLoadingAI] = useState(false);
   const [closing, setClosing] = useState(false);
   const [activeSlide, setActiveSlide] = useState("shap");
 
-  // =========================
-  // HOOK MUST ALWAYS RUN
-  // =========================
-
   const nodeId = node ? Number(node.id) : null;
   const { explanation, loading } = useExplanations(nodeId);
 
-  // SUPPORT BOTH BACKEND FORMATS
-
-  // =========================
-  // SAFE EARLY EXIT
-  // =========================
   if (!node) return null;
 
   const isAnomalous = node.is_anomalous === true || node.is_anomalous === 1;
 
-  // const reasons =
-  //   explanation?.reasons ??
-  //   explanation?.shap_reasons ??
-  //   explanation?.shapFactors ??
-  //   explanation?.shap_factors ??
-  //   [];
   const reasons = explanation?.reasons ?? [];
 
-  // =========================
-  // AI MOCK (OLD BEHAVIOR)
-  // =========================
   const generateAIExplanation = () => {
     setLoadingAI(true);
 
@@ -49,9 +28,6 @@ to anomalous accounts. Rapid inflow and outflow patterns indicate potential mule
     }, 1200);
   };
 
-  // =========================
-  // CLOSE WITH ANIMATION
-  // =========================
   const handleClose = () => {
     setClosing(true);
 
@@ -62,9 +38,6 @@ to anomalous accounts. Rapid inflow and outflow patterns indicate potential mule
     }, 250);
   };
 
-  // =========================
-  // RENDER (OLD DESIGN)
-  // =========================
   return (
     <aside
       className={`fixed right-0 top-0 pt-10 z-50 w-[380px] h-screen overflow-y-auto
@@ -165,10 +138,6 @@ to anomalous accounts. Rapid inflow and outflow patterns indicate potential mule
     </aside>
   );
 }
-
-/* =========================
-   HELPERS (UNCHANGED DESIGN)
-   ========================= */
 
 function Section({ title, children }) {
   return (
