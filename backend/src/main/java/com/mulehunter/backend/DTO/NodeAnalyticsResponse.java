@@ -11,7 +11,7 @@ public class NodeAnalyticsResponse {
 
     private NodeEnriched features;
     private AnomalyScore anomaly;
-    private List<ShapExplanation> shap;
+    private List<ShapExplanation> shap = List.of();
     private FraudExplanation reasons;
 
     public NodeAnalyticsResponse() {
@@ -48,4 +48,11 @@ public class NodeAnalyticsResponse {
     public void setReasons(FraudExplanation reasons) {
         this.reasons = reasons;
     }
+
+    public float getAnomalyScore() {
+        return anomaly != null
+                ? (float) anomaly.getAnomalyScore()
+                : 0.0f;
+    }
+
 }

@@ -15,7 +15,6 @@ import com.mulehunter.backend.model.ShapExplanation;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Flux;
 
-
 @RestController
 @RequestMapping("/backend/api/visual/shap-explanations")
 public class ShapExplanationController {
@@ -30,16 +29,21 @@ public class ShapExplanationController {
     public Mono<String> saveBatch(@RequestBody List<ShapExplanationDTO> payload) {
 
         return Flux.fromIterable(payload)
-                .flatMap(dto -> {
-                    ShapExplanation e = new ShapExplanation();
-                    e.setNodeId(dto.getNodeId());
-                    e.setAnomalyScore(dto.getAnomalyScore());
-                    e.setTopFactors(dto.getTopFactors());
-                    e.setModel(dto.getModel());
-                    e.setSource(dto.getSource());
-                    e.setUpdatedAt(Instant.now());
-                    return repository.save(e);
-                })
+                .flatMap(dto -> repository.findByNodeId(dto.getNodeId())
+                        .defaultIfEmpty(new ShapExplanation())
+                        .flatMap(existing -> {
+
+                            existing.setNodeId(dto.getNodeId());
+
+                            existing.setAnomalyScore(dto.getAnomalyScore());
+
+                            existing.setTopFactors(dto.getTopFactors());
+                            existing.setModel(dto.getModel());
+                            existing.setSource(dto.getSource());
+                            existing.setUpdatedAt(Instant.now());
+
+                            return repository.save(existing);
+                        }))
                 .then(Mono.just("SHAP explanations stored successfully"));
     }
 }

@@ -29,14 +29,15 @@ public class FraudExplanationController {
     public Mono<String> saveBatch(@RequestBody List<FraudExplanationDTO> payload) {
 
         return Flux.fromIterable(payload)
-                .flatMap(dto -> {
-                    FraudExplanation f = new FraudExplanation();
-                    f.setNodeId(dto.getNodeId());
-                    f.setReasons(dto.getReasons());
-                    f.setSource(dto.getSource());
-                    f.setUpdatedAt(Instant.now());
-                    return repository.save(f);
-                })
+                .flatMap(dto -> repository.findByNodeId(dto.getNodeId())
+                        .defaultIfEmpty(new FraudExplanation())
+                        .flatMap(existing -> {
+                            existing.setNodeId(dto.getNodeId());
+                            existing.setReasons(dto.getReasons());
+                            existing.setSource(dto.getSource());
+                            existing.setUpdatedAt(Instant.now());
+                            return repository.save(existing);
+                        }))
                 .then(Mono.just("Fraud explanations stored successfully"));
     }
 }

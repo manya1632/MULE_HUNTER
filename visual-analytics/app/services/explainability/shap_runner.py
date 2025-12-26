@@ -3,9 +3,7 @@ import shap
 from sklearn.ensemble import RandomForestClassifier
 from typing import List, Dict
 
-# ----------------------------
-# CONFIG
-# ----------------------------
+
 
 FEATURE_COLS = [
     "in_degree",
@@ -19,22 +17,22 @@ FEATURE_COLS = [
 ]
 
 TOP_K = 3
+MIN_SAMPLES = 10
+MIN_ANOMALIES = 2
 
-# ----------------------------
-# CORE SERVICE FUNCTION
-# ----------------------------
+
+
 
 def run_shap(scored_nodes: List[Dict]) -> List[Dict]:
     """
-    Runs SHAP explainability on anomalous nodes only
+    Generates SHAP explanations for anomalous nodes only
     using a surrogate RandomForest model.
 
-    Input:
-        scored_nodes → output of attach_scores()
-
-    Output:
-        SHAP explanations ready to be POSTed to
-        /backend/api/visual/shap-explanations/batch
+    scored_nodes:
+        normalized nodes with:
+        - node_id
+        - anomaly_score
+        - is_anomalous
     """
 
     if not scored_nodes:
@@ -42,22 +40,28 @@ def run_shap(scored_nodes: List[Dict]) -> List[Dict]:
 
     df = pd.DataFrame(scored_nodes)
 
-    # Safety checks
+    
+
     required_cols = FEATURE_COLS + ["node_id", "is_anomalous", "anomaly_score"]
     missing = [c for c in required_cols if c not in df.columns]
     if missing:
         raise ValueError(f"Missing required columns for SHAP: {missing}")
 
-    # Train surrogate model
+    
+    if len(df) < MIN_SAMPLES or df["is_anomalous"].sum() < MIN_ANOMALIES:
+        return []
+
+   
+
     X = df[FEATURE_COLS].fillna(0)
     y = df["is_anomalous"]
 
-    # If no anomalies exist, SHAP makes no sense
-    if y.sum() == 0:
-        return []
+    
+    # Train surrogate model
+    
 
     model = RandomForestClassifier(
-        n_estimators=150,
+        n_estimators=200,
         max_depth=6,
         random_state=42,
         class_weight="balanced",
@@ -65,38 +69,39 @@ def run_shap(scored_nodes: List[Dict]) -> List[Dict]:
     )
     model.fit(X, y)
 
-    # ----------------------------
-    # SHAP EXPLAINER
-    # ----------------------------
+  
+    # SHAP
+   
 
     explainer = shap.TreeExplainer(model)
-    raw_shap_values = explainer.shap_values(X)
+    shap_values = explainer.shap_values(X)
 
-    # Handle different SHAP formats safely
-    if isinstance(raw_shap_values, list):
-        # [class_0, class_1]
-        shap_values_anomalous = raw_shap_values[1]
-    elif len(raw_shap_values.shape) == 3:
-        # (samples, features, classes)
-        shap_values_anomalous = raw_shap_values[:, :, 1]
+    # Handle multi-class / binary safely
+    if isinstance(shap_values, list):
+        shap_anomaly = shap_values[1]
+    elif len(shap_values.shape) == 3:
+        shap_anomaly = shap_values[:, :, 1]
     else:
-        shap_values_anomalous = raw_shap_values
+        shap_anomaly = shap_values
+
+   
+    # Build explanations
+    
 
     explanations = []
 
-    # Process only anomalous nodes
-    anomalous_positions = df.index[df["is_anomalous"] == 1].tolist()
+    anomalous_indices = df.index[df["is_anomalous"] == 1].tolist()
 
-    for pos in anomalous_positions:
-        contribs = shap_values_anomalous[pos]
+    for idx in anomalous_indices:
+        impacts = shap_anomaly[idx]
 
-        feature_impacts = sorted(
-            zip(FEATURE_COLS, contribs),
+        top_features = sorted(
+            zip(FEATURE_COLS, impacts),
             key=lambda x: abs(x[1]),
             reverse=True
         )[:TOP_K]
 
-        row = df.iloc[pos]
+        row = df.iloc[idx]
 
         explanations.append({
             "node_id": int(row["node_id"]),
@@ -106,10 +111,10 @@ def run_shap(scored_nodes: List[Dict]) -> List[Dict]:
                     "feature": feature,
                     "impact": round(float(impact), 6)
                 }
-                for feature, impact in feature_impacts
+                for feature, impact in top_features
             ],
             "model": "rf_surrogate",
-            "source": "shap"
+            "source": "shap",
         })
 
     return explanations
