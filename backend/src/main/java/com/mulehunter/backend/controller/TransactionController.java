@@ -2,7 +2,7 @@ package com.mulehunter.backend.controller;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping; 
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -13,8 +13,8 @@ import com.mulehunter.backend.service.TransactionService;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/api") 
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true") 
+@RequestMapping("/api")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class TransactionController {
 
     private final TransactionService transactionService;
@@ -23,8 +23,10 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
-    @PostMapping("/transactions") 
+    @PostMapping("/transactions")
+
     public Mono<Transaction> createTransaction(@RequestBody TransactionRequest request) {
+        System.out.println("🔥 CONTROLLER HIT 🔥");
         return transactionService.createTransaction(request);
     }
 }

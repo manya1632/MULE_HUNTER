@@ -20,8 +20,8 @@ export default function VisualAnalyticsCard({
   }
 
   return (
-    <div className="p-4 bg-gray-900 rounded-xl border border-gray-800 space-y-3">
-      {/* HEADER */}
+    <div className="p-4 bg-gray-900 rounded-xl border border-gray-800 space-y-4">
+      {/* ================= HEADER ================= */}
       <div className="flex items-center justify-between">
         <h3 className="font-semibold text-orange-400">
           🟠 Visual-Analytics — Unsupervised ML
@@ -44,12 +44,12 @@ export default function VisualAnalyticsCard({
         Graph-based · Population-aware · Explainable (EIF + SHAP)
       </p>
 
-      {/* STREAMED EVENTS */}
+      {/* ================= STAGE-AWARE EVENTS ================= */}
       <div className="space-y-2 text-sm text-gray-300">
         {vaEvents.map((e, i) => (
           <div key={i}>
             {e.stage === "population_loaded" && (
-              <>📐 Loaded {e.data.total_nodes} reference accounts</>
+              <>📐 Loaded {e.data?.total_nodes} reference accounts</>
             )}
 
             {e.stage === "scoring_started" && (
@@ -58,8 +58,8 @@ export default function VisualAnalyticsCard({
 
             {e.stage === "eif_result" && (
               <>
-                📉 EIF Score <b>{e.data.score}</b>{" "}
-                {e.data.is_anomalous ? (
+                📉 EIF Score <b>{e.data?.score}</b>{" "}
+                {e.data?.is_anomalous ? (
                   <span className="text-red-500">→ ANOMALOUS</span>
                 ) : (
                   <span className="text-green-400">→ NORMAL</span>
@@ -75,7 +75,7 @@ export default function VisualAnalyticsCard({
               <>
                 🧠 Top contributing features:
                 <ul className="list-disc list-inside text-xs text-gray-400 mt-1">
-                  {e.data.top_factors.map((f: any, idx: number) => (
+                  {e.data?.top_factors?.map((f: any, idx: number) => (
                     <li key={idx}>
                       {f.feature} (impact {f.impact})
                     </li>
@@ -90,17 +90,42 @@ export default function VisualAnalyticsCard({
 
             {e.stage === "unsupervised_completed" && (
               <div className="mt-2 font-semibold text-green-400">
-                ✅ Visual-Analytics completed
+                 Visual-Analytics completed
               </div>
             )}
 
             {e.stage === "unsupervised_failed" && (
               <div className="text-red-500">
-                ❌ Visual-Analytics failed
+                 Visual-Analytics failed
               </div>
             )}
           </div>
         ))}
+      </div>
+
+      {/* ================= LIVE RAW EVENT STREAM ================= */}
+      <div className="bg-gray-900 border border-gray-800 rounded-xl p-4">
+        <h3 className="text-[#caff33] font-semibold mb-3">
+          🧠 Visual ML (Live)
+        </h3>
+
+        {vaEvents.length === 0 ? (
+          <p className="text-xs text-gray-500 italic">
+            Waiting for ML events…
+          </p>
+        ) : (
+          <ul className="space-y-2 text-sm">
+            {vaEvents.map((e, i) => (
+              <li key={i} className="text-gray-300">
+                <b>{e.stage || e.event}</b>{" "}
+                —{" "}
+                {typeof e.data === "string"
+                  ? e.data
+                  : JSON.stringify(e.data)}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       {vaStatus === "running" && (

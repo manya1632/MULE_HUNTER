@@ -1,3 +1,4 @@
+import json
 from fastapi import APIRouter, BackgroundTasks, Depends
 from pydantic import BaseModel
 from typing import List
@@ -59,7 +60,7 @@ def reanalyze_nodes(
 
 @router.get(
     "/visual/stream/unsupervised",
-    dependencies=[Depends(verify_internal_api_key)]
+    
 )
 async def stream_unsupervised(
     transactionId: str,
@@ -86,8 +87,9 @@ async def stream_unsupervised(
             event = await event_queue.get()
             yield {
                 "event": event["stage"],
-                "data": event["data"]
+                "data": json.dumps(event["data"])
             }
+
 
             # Stop stream when pipeline finishes
             if event["stage"] == "unsupervised_completed":
